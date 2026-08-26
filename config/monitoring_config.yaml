@@ -1,0 +1,72 @@
+# Model Monitoring Dashboard Configuration
+# ========================================
+
+# Drift Detection
+drift_detection:
+  enabled: true
+  
+  thresholds:
+    psi_threshold: 0.2
+    ks_threshold: 0.05
+    js_threshold: 0.1
+    feature_drift_threshold: 0.1
+    prediction_drift_threshold: 0.05
+  
+  methods:
+    - psi
+    - ks_test
+    - jensen_shannon
+    - wasserstein
+
+# Latency Tracking
+latency_tracking:
+  enabled: true
+  window_size: 1000
+  percentiles: [50, 90, 95, 99]
+  
+  alert_thresholds:
+    p99_ms: 1000
+    p95_ms: 500
+    p50_ms: 100
+    mean_ms: 200
+
+# Metrics Collector Database
+metrics_collector:
+  database:
+    host: localhost
+    port: 5432
+    database: model_monitoring
+    user: monitoring_user
+    password: ${POSTGRES_PASSWORD}
+
+# Alerting
+alerting:
+  enabled: true
+  slack_webhook: ${SLACK_WEBHOOK_URL}
+  
+  email:
+    enabled: false
+    smtp_host: smtp.gmail.com
+    smtp_port: 587
+    smtp_user: ${EMAIL_USER}
+    smtp_password: ${EMAIL_PASSWORD}
+    from_email: monitoring@company.com
+    to_email: alerts@company.com
+
+# Dashboard
+dashboard:
+  enabled: true
+  refresh_interval_seconds: 30
+  default_time_range_hours: 24
+
+# API Configuration
+api:
+  host: 0.0.0.0
+  port: 8001
+  workers: 4
+
+# Retention
+retention:
+  prediction_logs_days: 30
+  drift_alerts_days: 90
+  metrics_days: 30
